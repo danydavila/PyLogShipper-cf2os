@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import hashlib
 from urllib import parse
 
 
@@ -91,9 +92,13 @@ class ParseURL:
                 if parsed.scheme == "http":
                     url["port"] = 80
 
+            #
+            url["host_hash"] = self.host_hash_identifier(url)
+            url["path_hash"] = self.path_hash_identifier(url)
+
             url["isvalid"] = True
 
-        except (RuntimeError, TypeError, NameError):
+        except:
             print("Error parsing url_string. ParseURL")
 
         return url
@@ -101,3 +106,36 @@ class ParseURL:
     def parse_query(self):
         query_result = parse.parse_qsl(parse.urlsplit(self.url).query)
         return dict(query_result)
+
+    def path_hash_identifier(self, parsed: dict):
+        scheme = parsed["scheme"]
+        host = parsed["hostname"]
+        port = parsed["port"]
+        path = parsed["path"]
+
+        # initializing string
+        url_string = "{scheme}://{host}:{port}{path}".format(
+            scheme=scheme, host=host, port=port, path=path)
+
+        # encoding url_string using encode()
+        # then sending to SHA1()
+        result = hashlib.sha1(url_string.encode())
+
+        # return the equivalent hexadecimal value.
+        return result.hexdigest()
+
+    def host_hash_identifier(self, parsed: dict):
+        scheme = parsed["scheme"]
+        host = parsed["hostname"]
+        port = parsed["port"]
+
+        # initializing string
+        url_string = "{scheme}://{host}:{port}".format(
+            scheme=scheme, host=host, port=port)
+
+        # encoding url_string using encode()
+        # then sending to SHA1()
+        result = hashlib.sha1(url_string.encode())
+
+        # return the equivalent hexadecimal value.
+        return result.hexdigest()
