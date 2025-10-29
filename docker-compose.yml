@@ -1,0 +1,14 @@
+---
+
+services:
+  app:
+    # image: danydavila/py-cf-op-log-puller:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: py-cf-puller
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app
+    command: python pull-traffics.py
