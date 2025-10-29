@@ -99,6 +99,12 @@ src/.cache
 src/*/.cache
 src/*/*/.cache
 
+# Ignore Geo database files
+src/db/*
+src/db/GeoLite2-ASN.mmdb
+src/db/GeoLite2-City.mmdb
+!src/db/.gitkeep
+
 # developer notes
 docs/dev-notes/*
 !docs/dev-notes/.gitkeep
