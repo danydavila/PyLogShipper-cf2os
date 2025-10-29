@@ -45,7 +45,7 @@ This guide will walk you through the steps to create a versatile API Token with 
 
 7.  **Create and Record the Token:**
     * Click **"Create Token"**.     [View Screenshot](docs/assets/Cloudflare-Step-04.png)
-    * The generated token will be displayed **only once**.
+    * The generated token will be displayed **only once**. [View Screenshot](docs/assets/Cloudflare-Step-05.png)
     * **⚠️ IMPORTANT:** Copy the token and save it immediately in a secure location (like a password manager). You will **not** be able to see it again.
 
 ---

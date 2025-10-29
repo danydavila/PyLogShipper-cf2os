@@ -99,10 +99,11 @@ src/.cache
 src/*/.cache
 src/*/*/.cache
 
-# Ignore Geo database files
+# Ignore MaxMind GeoLite2 Databases
 src/db/*
 src/db/GeoLite2-ASN.mmdb
 src/db/GeoLite2-City.mmdb
+src/db/*.mmdb
 !src/db/.gitkeep
 
 # developer notes
