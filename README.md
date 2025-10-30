@@ -9,6 +9,7 @@ It serves as a connector between Cloudflare’s GraphQL log export API and your 
 - **Marketing Attribute Tracking** – Parsed URLs to extract and record key marketing parameters,, including Standard and Extended UTM tags, Google Ads (GCLID), Microsoft Ads (Bing), Facebook, LinkedIn, and Auto-Tagging parameters. These are then stored in OpenSearch for reporting and analytics. [Read more](docs/Marketing-attributes.md)
 - Connects to **Cloudflare GraphQL API** export endpoints to **retrieve logs**.
 - Supports **shipping** to OpenSearch / Elasticsearch endpoints via HTTP bulk API.
+- Supports both **Basic** and **Premium (Bot Management / Enterprise)** field sets from the Cloudflare log schema. [Read more](docs/Cloudflare-fields.md)
 - Batches and transforms log records into OpenSearch bulk-compatible format.
 - **Dockerized** for easy deployment.
 - Configuration via environment variables or `.env` file.
