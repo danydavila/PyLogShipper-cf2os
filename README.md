@@ -6,7 +6,7 @@ It serves as a connector between Cloudflare’s GraphQL log export API and your 
 
 
 ### Features
-- **Marketing Attribute Tracking** – Parsed URLs to extract and record key marketing parameters,, including Standard and Extended UTM tags, Google Ads (GCLID), Microsoft Ads (Bing), Facebook, LinkedIn, and Auto-Tagging parameters. These are then stored in OpenSearch for reporting and analytics. [Read more](docs/Marketing-attributes.md)
+- **Marketing Attribute Tracking** – Parsed URLs to extract and record key marketing parameters, including Standard and Extended UTM tags, Google Ads (GCLID), Microsoft Ads (Bing), Facebook, LinkedIn, and Auto-Tagging parameters. These are then stored in OpenSearch for reporting and analytics. [Read more](docs/Marketing-attributes.md)
 - Connects to **Cloudflare GraphQL API** export endpoints to **retrieve logs**.
 - Supports **shipping** to OpenSearch / Elasticsearch endpoints via HTTP bulk API.
 - Supports both **Basic** and **Premium (Bot Management / Enterprise)** field sets from the Cloudflare log schema. [Read more](docs/Cloudflare-fields.md)
@@ -32,7 +32,7 @@ src/db/
 ```
 see the [GeoLite2 Database Setup](docs/GeoLite2-Download.md).
 
-- An OpenSearch (or Elasticsearch-compatible) endpoint accessible from the running container or host. [Sandbox OpenSearch Standalone](git@github.com:danydavila/POC-Elasticsearch-Opensearch.git) 
+- An OpenSearch (or Elasticsearch-compatible) endpoint accessible from the running container or host. [Sandbox OpenSearch Standalone](git@github.com:danydavila/POC-Elasticsearch-Opensearch.git)
 - [Docker & docker-compose](https://www.docker.com/) (if running via Docker), or Python 3.11+ (if running locally).
 
 ### Configuration
@@ -46,14 +46,16 @@ cp .env.example .env
 2. Edit `.env` (or export environment variables) setting e.g.:
 
 ```
-CLOUDFLARE_API_TOKEN=your_token
-CLOUDFLARE_ACCOUNT_ID=your_account_id
-CLOUDFLARE_ZONE_ID=your_zone_id
-OPENSEARCH_ENDPOINT=https://your-opensearch.example.com:9200
-OPENSEARCH_API_KEY=your_api_key_or_credentials
-INDEX_NAME=cloudflare_logs
-BATCH_SIZE=500
-LOG_LEVEL=INFO
+CLOUDFLARE_API_KEY=your_token
+CLOUDFLARE_ACCOUNT=your_account_id
+CLOUDFLARE_ZONE=your_zone_id
+INCLUDE_PREMIUM_FIELDS=false
+OPENSEARCH_USERNAME=cloudflare_ingest_user
+OPENSEARCH_PASSWORD=***SecretPassword***
+OPENSEARCH_HOSTNAME=localhost
+OPENSEARCH_PORT=9200
+OPENSEARCH_INDEX=cloudflare-requests-
+
 ```
 
 > Ensure the credentials and endpoints are correct and reachable.
@@ -71,7 +73,7 @@ This will start the service, pick up logs from Cloudflare and ship them into Ope
 #### via Python direct (for development)
 
 ```bash
-pip install -r requirements.txt  
+pip install -r requirements.txt
 python src/pull-traffics.py
 ```
 
