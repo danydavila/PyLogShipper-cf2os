@@ -2,11 +2,11 @@
 
 services:
   app:
-    # image: danydavila/py-cf-op-log-puller:1.0
+    image: danydavila/pylogshipper-cf2os:1.0
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: py-cf-puller
+    container_name: PyLogShipper-cf2os
     env_file:
       - .env
     volumes:

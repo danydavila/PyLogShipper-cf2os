@@ -1,5 +1,5 @@
 # Use a slim Python image for a smaller footprint
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 # Python env hygiene
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -15,8 +15,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source
-COPY src/pull-events.py ./pull-events.py
 COPY src/pull-traffics.py ./pull-traffics.py
+COPY src/db/.gitkeep ./db/.gitkeep
 COPY src/library ./library
 
 # Drop privileges

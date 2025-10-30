@@ -205,12 +205,30 @@ def sent_to_es(raw_data, batch_name: str = None, index_prefix_name: str = None):
 
     for item in data['viewer']['zones'][0]['series']:
         item_data = item['dimensions']
+
+        # Ensure required fields have empty values if not present
+        required_fields = [
+            'clientCountryName',
+            'clientIP',
+            'clientRequestHTTPHost',
+            'clientRequestHTTPMethodName',
+            'clientRequestPath',
+            'datetime',
+            'edgeResponseStatus',
+            'originResponseStatus',
+            'sampleInterval',
+            'userAgent'
+        ]
+        for field in required_fields:
+            if field not in item_data or item_data[field] is None:
+                item_data[field] = ''
+
         created_date = item_data['datetime']
         created_at = datetime.fromisoformat(created_date).strftime("%Y.%m.%d")
 
         # client request query dicts
         client_request_utm_dict = parse_client_request_query_string(
-            item_data['clientRequestQuery'])
+            item_data.get('clientRequestQuery', ''))
         item_data = merge_two_dicts(item_data, client_request_utm_dict)
 
         # user agent dicts
@@ -219,7 +237,7 @@ def sent_to_es(raw_data, batch_name: str = None, index_prefix_name: str = None):
 
         # referer dicts
         parsed_referer = parse_client_referer_url_string(
-            item_data['clientRequestReferer'])
+            item_data.get('clientRequestReferer', ''))
         item_data = merge_two_dicts(item_data, parsed_referer)
 
         # normalize the country name

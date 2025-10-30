@@ -97,10 +97,31 @@ def parse_url(url):
         'utm_campaign': '',
         'utm_content': '',
         'utm_term': '',
+        'utm_campaign_id': '',
+        'utm_id': '',
+        'utm_ad_id': '',
+        'utm_source_platform': '',
+        'utm_creative_format': '',
+        'utm_marketing_tactic': '',
+        'utm_creative_id': '',
         'product': '',
         'search_keyword': '',
+        'li_fat_id': '',
+        'fbclid': '',
         'msclkid': '',
         'gclid': '',
+        'hsa_acc': '',
+        'hsa_cam': '',
+        'hsa_grp': '',
+        'hsa_ad': '',
+        'hsa_src': '',
+        'hsa_tgt': '',
+        'hsa_kw': '',
+        'hsa_mt': '',
+        'hsa_net': '',
+        'hsa_ver': '',
+        'gad_source': '',
+        'gad_campaignid': '',
     }
 
     # if utm_source is not in the query string, return None
@@ -125,11 +146,32 @@ def parse_url(url):
     if 'utm_campaign' in dict_result:
         url_dict['utm_campaign'] = dict_result['utm_campaign'][0]
 
+    if 'utm_campaign_id' in dict_result:
+        url_dict['utm_campaign_id'] = dict_result['utm_campaign_id'][0]
+
+    if 'utm_id' in dict_result:
+        url_dict['utm_id'] = dict_result['utm_id'][0]
+
+    if 'utm_ad_id' in dict_result:
+        url_dict['utm_ad_id'] = dict_result['utm_ad_id'][0]
+
     if 'utm_content' in dict_result:
         url_dict['utm_content'] = dict_result['utm_content'][0]
 
     if 'utm_term' in dict_result:
         url_dict['utm_term'] = normalize_string(dict_result['utm_term'][0])
+
+    if 'utm_source_platform' in dict_result:
+        url_dict['utm_source_platform'] = dict_result['utm_source_platform'][0]
+
+    if 'utm_creative_format' in dict_result:
+        url_dict['utm_creative_format'] = dict_result['utm_creative_format'][0]
+
+    if 'utm_marketing_tactic' in dict_result:
+        url_dict['utm_marketing_tactic'] = dict_result['utm_marketing_tactic'][0]
+
+    if 'utm_creative_id' in dict_result:
+        url_dict['utm_creative_id'] = dict_result['utm_creative_id'][0]
 
     if 'product' in dict_result:
         url_dict['product'] = dict_result['product'][0]
@@ -156,12 +198,46 @@ def parse_url(url):
     if 'q' in dict_result:
         url_dict['search_keyword'] = normalize_string(dict_result['q'][0])
 
-    # auto-tagging
+    # Microsoft Ads auto-tagging
     if 'msclkid' in dict_result:
         url_dict['msclkid'] = dict_result['msclkid'][0]
-
+    # Google Ads auto-tagging
     if 'gclid' in dict_result:
         url_dict['gclid'] = dict_result['gclid'][0]
+    # LinkedIn auto-tagging
+    if 'li_fat_id' in dict_result:
+        url_dict['li_fat_id'] = dict_result['li_fat_id'][0]
+    # Facebook auto-tagging
+    if 'fbclid' in dict_result:
+        url_dict['fbclid'] = dict_result['fbclid'][0]
+
+    # Google Ads manual tagging (hsa_* parameters)
+    if 'hsa_acc' in dict_result:
+        url_dict['hsa_acc'] = dict_result['hsa_acc'][0]
+    if 'hsa_cam' in dict_result:
+        url_dict['hsa_cam'] = dict_result['hsa_cam'][0]
+    if 'hsa_grp' in dict_result:
+        url_dict['hsa_grp'] = dict_result['hsa_grp'][0]
+    if 'hsa_ad' in dict_result:
+        url_dict['hsa_ad'] = dict_result['hsa_ad'][0]
+    if 'hsa_src' in dict_result:
+        url_dict['hsa_src'] = dict_result['hsa_src'][0]
+    if 'hsa_tgt' in dict_result:
+        url_dict['hsa_tgt'] = dict_result['hsa_tgt'][0]
+    if 'hsa_kw' in dict_result:
+        url_dict['hsa_kw'] = normalize_string(dict_result['hsa_kw'][0])
+    if 'hsa_mt' in dict_result:
+        url_dict['hsa_mt'] = dict_result['hsa_mt'][0]
+    if 'hsa_net' in dict_result:
+        url_dict['hsa_net'] = dict_result['hsa_net'][0]
+    if 'hsa_ver' in dict_result:
+        url_dict['hsa_ver'] = dict_result['hsa_ver'][0]
+
+    # Google Ads enhanced parameters (gad_* parameters)
+    if 'gad_source' in dict_result:
+        url_dict['gad_source'] = dict_result['gad_source'][0]
+    if 'gad_campaignid' in dict_result:
+        url_dict['gad_campaignid'] = dict_result['gad_campaignid'][0]
 
     return url_dict
 
@@ -305,10 +381,31 @@ def parse_client_referer_url_string(url_string: str) -> dict:
         'clientReferer_utm_campaign': parsed_url_result['utm_campaign'],
         'clientReferer_utm_content': parsed_url_result['utm_content'],
         'clientReferer_utm_term': parsed_url_result['utm_term'],
+        'clientReferer_utm_campaign_id': parsed_url_result['utm_campaign_id'],
+        'clientReferer_utm_id': parsed_url_result['utm_id'],
+        'clientReferer_utm_ad_id': parsed_url_result['utm_ad_id'],
+        'clientReferer_utm_source_platform': parsed_url_result['utm_source_platform'],
+        'clientReferer_utm_creative_format': parsed_url_result['utm_creative_format'],
+        'clientReferer_utm_marketing_tactic': parsed_url_result['utm_marketing_tactic'],
+        'clientReferer_utm_creative_id': parsed_url_result['utm_creative_id'],
         'clientReferer_product': parsed_url_result['product'],
         'clientReferer_search_keyword': parsed_url_result['search_keyword'],
+        'clientReferer_li_fat_id': parsed_url_result['li_fat_id'],
+        'clientReferer_fbclid': parsed_url_result['fbclid'],
         'clientReferer_msclkid': parsed_url_result['msclkid'],
-        'clientReferer_gclid': parsed_url_result['gclid']
+        'clientReferer_gclid': parsed_url_result['gclid'],
+        'clientReferer_hsa_acc': parsed_url_result['hsa_acc'],
+        'clientReferer_hsa_cam': parsed_url_result['hsa_cam'],
+        'clientReferer_hsa_grp': parsed_url_result['hsa_grp'],
+        'clientReferer_hsa_ad': parsed_url_result['hsa_ad'],
+        'clientReferer_hsa_src': parsed_url_result['hsa_src'],
+        'clientReferer_hsa_tgt': parsed_url_result['hsa_tgt'],
+        'clientReferer_hsa_kw': parsed_url_result['hsa_kw'],
+        'clientReferer_hsa_mt': parsed_url_result['hsa_mt'],
+        'clientReferer_hsa_net': parsed_url_result['hsa_net'],
+        'clientReferer_hsa_ver': parsed_url_result['hsa_ver'],
+        'clientReferer_gad_source': parsed_url_result['gad_source'],
+        'clientReferer_gad_campaignid': parsed_url_result['gad_campaignid']
     }
 
     return utm_dict
@@ -322,9 +419,30 @@ def parse_client_request_query_string(url_string: str) -> dict:
         'clientRequest_utm_campaign': parsed_url_result['utm_campaign'],
         'clientRequest_utm_content': parsed_url_result['utm_content'],
         'clientRequest_utm_term': parsed_url_result['utm_term'],
+        'clientRequest_utm_id': parsed_url_result['utm_id'],
+        'clientRequest_utm_campaign_id': parsed_url_result['utm_campaign_id'],
+        'clientRequest_utm_ad_id': parsed_url_result['utm_ad_id'],
+        'clientRequest_utm_source_platform': parsed_url_result['utm_source_platform'],
+        'clientRequest_utm_creative_format': parsed_url_result['utm_creative_format'],
+        'clientRequest_utm_marketing_tactic': parsed_url_result['utm_marketing_tactic'],
+        'clientRequest_utm_creative_id': parsed_url_result['utm_creative_id'],
         'clientRequest_product': parsed_url_result['product'],
         'clientRequest_search_keyword': parsed_url_result['search_keyword'],
+        'clientRequest_li_fat_id': parsed_url_result['li_fat_id'],
+        'clientRequest_fbclid': parsed_url_result['fbclid'],
         'clientRequest_msclkid': parsed_url_result['msclkid'],
-        'clientRequest_gclid': parsed_url_result['gclid']
+        'clientRequest_gclid': parsed_url_result['gclid'],
+        'clientRequest_hsa_acc': parsed_url_result['hsa_acc'],
+        'clientRequest_hsa_cam': parsed_url_result['hsa_cam'],
+        'clientRequest_hsa_grp': parsed_url_result['hsa_grp'],
+        'clientRequest_hsa_ad': parsed_url_result['hsa_ad'],
+        'clientRequest_hsa_src': parsed_url_result['hsa_src'],
+        'clientRequest_hsa_tgt': parsed_url_result['hsa_tgt'],
+        'clientRequest_hsa_kw': parsed_url_result['hsa_kw'],
+        'clientRequest_hsa_mt': parsed_url_result['hsa_mt'],
+        'clientRequest_hsa_net': parsed_url_result['hsa_net'],
+        'clientRequest_hsa_ver': parsed_url_result['hsa_ver'],
+        'clientRequest_gad_source': parsed_url_result['gad_source'],
+        'clientRequest_gad_campaignid': parsed_url_result['gad_campaignid']
     }
     return utm_dict
