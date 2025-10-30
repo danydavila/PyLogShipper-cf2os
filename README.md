@@ -6,10 +6,11 @@ It serves as a connector between Cloudflare’s GraphQL log export API and your 
 
 
 ### Features
-- Connects to Cloudflare GraphQL API export endpoints to retrieve logs.
+- **Marketing Attribute Tracking** – Parsed URLs to extract and record key marketing parameters,, including Standard and Extended UTM tags, Google Ads (GCLID), Microsoft Ads (Bing), Facebook, LinkedIn, and Auto-Tagging parameters. These are then stored in OpenSearch for reporting and analytics. [Read more](docs/Marketing-attributes.md)
+- Connects to **Cloudflare GraphQL API** export endpoints to **retrieve logs**.
+- Supports **shipping** to OpenSearch / Elasticsearch endpoints via HTTP bulk API.
 - Batches and transforms log records into OpenSearch bulk-compatible format.
-- Supports shipping to OpenSearch / Elasticsearch endpoints via HTTP bulk API.
-- Dockerized for easy deployment.
+- **Dockerized** for easy deployment.
 - Configuration via environment variables or `.env` file.
 - Basic error handling, retry logic and logging.
 - Sequence diagram for the [PyLogShipper-cf2os workflow](docs/assets/Diagram-Sequence.png)
@@ -79,4 +80,4 @@ Thanks to the Cloudflare and OpenSearch communities for their excellent APIs and
 Inspired by log-shipping patterns common in security logging, observability and analytics.
 
 
-Made with love ❤️[]()
+Made with love ❤️
