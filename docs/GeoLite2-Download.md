@@ -80,16 +80,6 @@ project-root/
 ```
 
 
-## 🧠 5. Optional: Verify Databases
-
-You can confirm the files are valid using the `mmdblookup` utility:
-
-```bash
-mmdblookup --file src/db/GeoLite2-City.mmdb --ip 8.8.8.8
-mmdblookup --file src/db/GeoLite2-ASN.mmdb --ip 8.8.8.8
-```
-
-
 ## ⚠️ License Reminder
 
 These databases are provided by **MaxMind** under the [GeoLite2 EULA](https://www.maxmind.com/en/geolite2/eula).
