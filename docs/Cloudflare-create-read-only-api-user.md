@@ -12,10 +12,10 @@ This guide will walk you through the steps to create a versatile API Token with 
     * In the top-right corner, click on **"My Profile"** or your account name.
     * Select **"API Tokens"** from the sidebar or the dropdown menu.
     * Click the **"Create Token"** button.
-    [View Screenshot](docs/assets/Cloudflare-Step-01.png)
+    [View Screenshot](assets/Cloudflare-Step-01.png)
 
 3.  **Start with a Custom Token:**
-    * Instead of using a template, select **"Create Custom Token"** at the bottom of the list. [View Screenshot](docs/assets/Cloudflare-Step-02.png)
+    * Instead of using a template, select **"Create Custom Token"** at the bottom of the list. [View Screenshot](assets/Cloudflare-Step-02.png)
 
 4.  **Configure the Token Details:**
 
@@ -37,15 +37,15 @@ This guide will walk you through the steps to create a versatile API Token with 
 | **Zone** | **Logs** | **Read** |
 | **Account** | **Analytics** | **Read** |
 
-[View Screenshot](docs/assets/Cloudflare-Step-03.png)
+[View Screenshot](assets/Cloudflare-Step-03.png)
 
 6.  **Continue and Review:**
     * Click **"Continue to Summary"**.
     * Review the permissions to confirm they are **Read** access only for the intended Zone and Account resources.
 
 7.  **Create and Record the Token:**
-    * Click **"Create Token"**.     [View Screenshot](docs/assets/Cloudflare-Step-04.png)
-    * The generated token will be displayed **only once**. [View Screenshot](docs/assets/Cloudflare-Step-05.png)
+    * Click **"Create Token"**.     [View Screenshot](assets/Cloudflare-Step-04.png)
+    * The generated token will be displayed **only once**. [View Screenshot](assets/Cloudflare-Step-05.png)
     * **⚠️ IMPORTANT:** Copy the token and save it immediately in a secure location (like a password manager). You will **not** be able to see it again.
 
 ---
