@@ -20,7 +20,8 @@ from pprint import pprint
 url = 'https://api.cloudflare.com/client/v4/graphql/'
 
 # Customize these variables via Docker env (pass with --env-file or -e)
-file_dir = ''  # Must include trailing slash. If left blank, csv will be created in the current directory.
+# Must include trailing slash. If left blank, csv will be created in the current directory.
+file_dir = ''
 api_token = os.getenv("CLOUDFLARE_API_KEY")
 CLOUDFLARE_ACCOUNT = os.getenv("CLOUDFLARE_ACCOUNT")  # accountTag
 CLOUDFLARE_ZONE = os.getenv("CLOUDFLARE_ZONE")        # zoneTag
@@ -35,12 +36,15 @@ OPENSEARCH_PASSWORD = os.getenv("OPENSEARCH_PASSWORD", "admin")
 OPENSEARCH_HOSTNAME = os.getenv("OPENSEARCH_HOSTNAME", "opensearch-node")
 OPENSEARCH_PORT = int(os.getenv("OPENSEARCH_PORT", "9200"))
 OPENSEARCH_INDEX_PREFIX = os.getenv("OPENSEARCH_INDEX", "cloudflare-requests-")
-
-# Optional: keep the original variable (not strictly used below, kept to "keep everything the same")
 OPENSEARCH_HOST = f"https://{OPENSEARCH_HOSTNAME}:9200"
 
+# Cloudflare plan configuration
+# Set to "true" or "1" if you have Bot Management or Enterprise plan
+INCLUDE_PREMIUM_FIELDS = True if os.getenv("INCLUDE_PREMIUM_FIELDS", "false").lower() in ("true", "1", "yes") else False
+
 es = OpenSearch(
-    hosts=[{"host": OPENSEARCH_HOSTNAME, "port": OPENSEARCH_PORT, "scheme": "https"}],
+    hosts=[{"host": OPENSEARCH_HOSTNAME,
+            "port": OPENSEARCH_PORT, "scheme": "https"}],
     http_auth=(OPENSEARCH_USERNAME, OPENSEARCH_PASSWORD),
     # turn on SSL
     use_ssl=True,
@@ -64,7 +68,8 @@ def get_past_date(num_days):
     return today - timedelta(days=num_days)
 
 
-def get_cf_graphql(limit, start_date, end_date):
+def get_cf_graphql(limit, start_date, end_date, include_premium_fields=False):
+
     assert (start_date <= end_date)
     headers = {
         'Content-Type': 'application/json',
@@ -73,22 +78,60 @@ def get_cf_graphql(limit, start_date, end_date):
     # Make sure this is the correct URL for your Cloudflare API
     url = 'https://api.cloudflare.com/client/v4/graphql'
 
+    # Base fields available on all plans
+    base_fields = """
+        clientCountryName: clientCountryName
+        clientIP: clientIP
+        clientRequestHTTPHost: clientRequestHTTPHost
+        clientRequestHTTPMethodName: clientRequestHTTPMethodName
+        clientRequestPath: clientRequestPath
+        datetime: datetime
+        edgeResponseStatus: edgeResponseStatus
+        originResponseStatus: originResponseStatus
+        sampleInterval: sampleInterval
+        userAgent: userAgent
+    """
+
+    # Premium fields for Bot Management/Enterprise plans
+    premium_fields = """
+        originIP: originIP
+        clientRequestQuery: clientRequestQuery
+        clientRequestReferer: clientRequestReferer
+        clientRefererHost: clientRefererHost
+        clientAsn: clientAsn
+        clientASNDescription: clientASNDescription
+        edgeResponseContentTypeName: edgeResponseContentTypeName
+        botManagementDecision: botManagementDecision
+        botScoreSrcName: botScoreSrcName
+        securityAction: securityAction
+        securitySource: securitySource
+        wafAttackScore: wafAttackScore
+        wafAttackScoreClass: wafAttackScoreClass
+        wafXssAttackScore: wafXssAttackScore
+        xRequestedWith: xRequestedWith
+    """
+
+    # Combine fields based on plan
+    dimensions_fields = base_fields
+    if include_premium_fields:
+        dimensions_fields += premium_fields
+
     payload = f'''{{
-    "query": "query ZapTimeseriesBydatetimeGroupedByclientRequestPath( $zoneTag: string $filter: ZoneHttpRequestsAdaptiveGroupsFilter_InputObject ) {{ viewer {{ zones(filter: {{ zoneTag: $zoneTag }}) {{ series: httpRequestsAdaptiveGroups(limit: 10000, filter: $filter) {{ count avg {{ sampleInterval __typename }} sum {{ edgeResponseBytes visits __typename }} dimensions {{ botManagementDecision: botManagementDecision botScoreSrcName: botScoreSrcName clientAsn: clientAsn clientASNDescription: clientASNDescription clientCountryName: clientCountryName clientIP: clientIP clientRefererHost: clientRefererHost clientRequestHTTPHost: clientRequestHTTPHost clientRequestHTTPMethodName: clientRequestHTTPMethodName clientRequestPath: clientRequestPath clientRequestQuery: clientRequestQuery clientRequestReferer: clientRequestReferer datetime: datetime edgeResponseContentTypeName: edgeResponseContentTypeName edgeResponseStatus: edgeResponseStatus originIP: originIP originResponseStatus: originResponseStatus sampleInterval: sampleInterval securityAction: securityAction securitySource: securitySource userAgent: userAgent wafAttackScore: wafAttackScore wafAttackScoreClass: wafAttackScoreClass wafXssAttackScore: wafXssAttackScore xRequestedWith: xRequestedWith }} __typename }} __typename }} __typename }} }}",
+    "query": "query ZapTimeseriesBydatetimeGroupedByclientRequestPath( $zoneTag: string $filter: ZoneHttpRequestsAdaptiveGroupsFilter_InputObject ) {{ viewer {{ zones(filter: {{ zoneTag: $zoneTag }}) {{ series: httpRequestsAdaptiveGroups(limit: 10000, filter: $filter) {{ count avg {{ sampleInterval __typename }} sum {{ edgeResponseBytes visits __typename }} dimensions {{ {dimensions_fields} }} __typename }} __typename }} __typename }} }}",
      "variables": {{
     "accountTag": "{CLOUDFLARE_ACCOUNT}",
     "zoneTag": "{CLOUDFLARE_ZONE}",
     "filter": {{
       "AND": [
         {{
-            "datetime_geq": "{start_date}",
-            "datetime_leq": "{end_date}"
+          "datetime_geq": "{start_date}",
+          "datetime_leq": "{end_date}"
         }},
         {{
-             "userAgent_neq": ""
+          "userAgent_neq": ""
          }},
         {{
-         "userAgent_neq": "test"
+          "userAgent_neq": "test"
         }},
         {{
           "clientRequestPath_notlike": "%/.well-known/%"
@@ -96,9 +139,9 @@ def get_cf_graphql(limit, start_date, end_date):
         {{
          "clientRequestPath_neq": "//.well-known/"
         }},
-       {{
-        "clientRequestPath_notlike": "/favicon.ico"
-      }},
+        {{
+          "clientRequestPath_notlike": "/favicon.ico"
+        }},
         {{
           "clientRequestPath_notlike": "%.ico%"
         }},
@@ -113,9 +156,6 @@ def get_cf_graphql(limit, start_date, end_date):
         }},
         {{
           "clientRequestPath_notlike": "%/durbin%"
-        }},
-        {{
-          "clientRequestPath_notlike": "%/xmlrpc.php%"
         }},
         {{
           "clientRequestPath_notlike": "%/Blueprint.aspx%"
@@ -239,8 +279,8 @@ def main():
     batch_name = os.getenv("LOG_BACTH_NAME", "LOG250731")
 
     # Dates from env (YYYY-MM-DD), converted to full Zulu timestamps
-    start_date_env = os.getenv("LOG_DATE_START", "2025-06-20")
-    end_date_env = os.getenv("LOG_DATE_END", "2025-07-31")
+    start_date_env = os.getenv("LOG_DATE_START", "2025-10-01")
+    end_date_env = os.getenv("LOG_DATE_END", "2025-10-31")
 
     start_date_obj = datetime.strptime(
         f"{start_date_env}T00:00:00Z", "%Y-%m-%dT%H:%M:%SZ"
@@ -272,7 +312,7 @@ def main():
 
         try:
             r = get_cf_graphql(
-                api_row_limit, item_start_date_string, item_end_date_string)
+                api_row_limit, item_start_date_string, item_end_date_string, INCLUDE_PREMIUM_FIELDS)
             r.raise_for_status()
         except requests.exceptions.HTTPError as http_err:
             print(f'HTTP error occurred: {http_err}')
