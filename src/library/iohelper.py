@@ -97,8 +97,17 @@ def parse_url(url):
         'utm_campaign': '',
         'utm_content': '',
         'utm_term': '',
+        'utm_campaign_id': '',
+        'utm_id': '',
+        'utm_ad_id': '',
+        'utm_source_platform': '',
+        'utm_creative_format': '',
+        'utm_marketing_tactic': '',
+        'utm_creative_id': '',
         'product': '',
         'search_keyword': '',
+        'li_fat_id': '',
+        'fbclid': '',
         'msclkid': '',
         'gclid': '',
     }
@@ -125,11 +134,32 @@ def parse_url(url):
     if 'utm_campaign' in dict_result:
         url_dict['utm_campaign'] = dict_result['utm_campaign'][0]
 
+    if 'utm_campaign_id' in dict_result:
+        url_dict['utm_campaign_id'] = dict_result['utm_campaign_id'][0]
+
+    if 'utm_id' in dict_result:
+        url_dict['utm_id'] = dict_result['utm_id'][0]
+
+    if 'utm_ad_id' in dict_result:
+        url_dict['utm_ad_id'] = dict_result['utm_ad_id'][0]
+
     if 'utm_content' in dict_result:
         url_dict['utm_content'] = dict_result['utm_content'][0]
 
     if 'utm_term' in dict_result:
         url_dict['utm_term'] = normalize_string(dict_result['utm_term'][0])
+
+    if 'utm_source_platform' in dict_result:
+        url_dict['utm_source_platform'] = dict_result['utm_source_platform'][0]
+
+    if 'utm_creative_format' in dict_result:
+        url_dict['utm_creative_format'] = dict_result['utm_creative_format'][0]
+
+    if 'utm_marketing_tactic' in dict_result:
+        url_dict['utm_marketing_tactic'] = dict_result['utm_marketing_tactic'][0]
+
+    if 'utm_creative_id' in dict_result:
+        url_dict['utm_creative_id'] = dict_result['utm_creative_id'][0]
 
     if 'product' in dict_result:
         url_dict['product'] = dict_result['product'][0]
@@ -156,12 +186,18 @@ def parse_url(url):
     if 'q' in dict_result:
         url_dict['search_keyword'] = normalize_string(dict_result['q'][0])
 
-    # auto-tagging
+    # Microsoft Ads auto-tagging
     if 'msclkid' in dict_result:
         url_dict['msclkid'] = dict_result['msclkid'][0]
-
+    # Google Ads auto-tagging
     if 'gclid' in dict_result:
         url_dict['gclid'] = dict_result['gclid'][0]
+    # LinkedIn auto-tagging
+    if 'li_fat_id' in dict_result:
+        url_dict['li_fat_id'] = dict_result['li_fat_id'][0]
+    # Facebook auto-tagging
+    if 'fbclid' in dict_result:
+        url_dict['fbclid'] = dict_result['fbclid'][0]
 
     return url_dict
 
@@ -305,8 +341,17 @@ def parse_client_referer_url_string(url_string: str) -> dict:
         'clientReferer_utm_campaign': parsed_url_result['utm_campaign'],
         'clientReferer_utm_content': parsed_url_result['utm_content'],
         'clientReferer_utm_term': parsed_url_result['utm_term'],
+        'clientReferer_utm_campaign_id': parsed_url_result['utm_campaign_id'],
+        'clientReferer_utm_id': parsed_url_result['utm_id'],
+        'clientReferer_utm_ad_id': parsed_url_result['utm_ad_id'],
+        'clientReferer_utm_source_platform': parsed_url_result['utm_source_platform'],
+        'clientReferer_utm_creative_format': parsed_url_result['utm_creative_format'],
+        'clientReferer_utm_marketing_tactic': parsed_url_result['utm_marketing_tactic'],
+        'clientReferer_utm_creative_id': parsed_url_result['utm_creative_id'],
         'clientReferer_product': parsed_url_result['product'],
         'clientReferer_search_keyword': parsed_url_result['search_keyword'],
+        'clientReferer_li_fat_id': parsed_url_result['li_fat_id'],
+        'clientReferer_fbclid': parsed_url_result['fbclid'],
         'clientReferer_msclkid': parsed_url_result['msclkid'],
         'clientReferer_gclid': parsed_url_result['gclid']
     }
@@ -322,8 +367,17 @@ def parse_client_request_query_string(url_string: str) -> dict:
         'clientRequest_utm_campaign': parsed_url_result['utm_campaign'],
         'clientRequest_utm_content': parsed_url_result['utm_content'],
         'clientRequest_utm_term': parsed_url_result['utm_term'],
+        'clientRequest_utm_id': parsed_url_result['utm_id'],
+        'clientRequest_utm_campaign_id': parsed_url_result['utm_campaign_id'],
+        'clientRequest_utm_ad_id': parsed_url_result['utm_ad_id'],
+        'clientRequest_utm_source_platform': parsed_url_result['utm_source_platform'],
+        'clientRequest_utm_creative_format': parsed_url_result['utm_creative_format'],
+        'clientRequest_utm_marketing_tactic': parsed_url_result['utm_marketing_tactic'],
+        'clientRequest_utm_creative_id': parsed_url_result['utm_creative_id'],
         'clientRequest_product': parsed_url_result['product'],
         'clientRequest_search_keyword': parsed_url_result['search_keyword'],
+        'clientRequest_li_fat_id': parsed_url_result['li_fat_id'],
+        'clientRequest_fbclid': parsed_url_result['fbclid'],
         'clientRequest_msclkid': parsed_url_result['msclkid'],
         'clientRequest_gclid': parsed_url_result['gclid']
     }
