@@ -110,6 +110,18 @@ def parse_url(url):
         'fbclid': '',
         'msclkid': '',
         'gclid': '',
+        'hsa_acc': '',
+        'hsa_cam': '',
+        'hsa_grp': '',
+        'hsa_ad': '',
+        'hsa_src': '',
+        'hsa_tgt': '',
+        'hsa_kw': '',
+        'hsa_mt': '',
+        'hsa_net': '',
+        'hsa_ver': '',
+        'gad_source': '',
+        'gad_campaignid': '',
     }
 
     # if utm_source is not in the query string, return None
@@ -198,6 +210,34 @@ def parse_url(url):
     # Facebook auto-tagging
     if 'fbclid' in dict_result:
         url_dict['fbclid'] = dict_result['fbclid'][0]
+
+    # Google Ads manual tagging (hsa_* parameters)
+    if 'hsa_acc' in dict_result:
+        url_dict['hsa_acc'] = dict_result['hsa_acc'][0]
+    if 'hsa_cam' in dict_result:
+        url_dict['hsa_cam'] = dict_result['hsa_cam'][0]
+    if 'hsa_grp' in dict_result:
+        url_dict['hsa_grp'] = dict_result['hsa_grp'][0]
+    if 'hsa_ad' in dict_result:
+        url_dict['hsa_ad'] = dict_result['hsa_ad'][0]
+    if 'hsa_src' in dict_result:
+        url_dict['hsa_src'] = dict_result['hsa_src'][0]
+    if 'hsa_tgt' in dict_result:
+        url_dict['hsa_tgt'] = dict_result['hsa_tgt'][0]
+    if 'hsa_kw' in dict_result:
+        url_dict['hsa_kw'] = normalize_string(dict_result['hsa_kw'][0])
+    if 'hsa_mt' in dict_result:
+        url_dict['hsa_mt'] = dict_result['hsa_mt'][0]
+    if 'hsa_net' in dict_result:
+        url_dict['hsa_net'] = dict_result['hsa_net'][0]
+    if 'hsa_ver' in dict_result:
+        url_dict['hsa_ver'] = dict_result['hsa_ver'][0]
+
+    # Google Ads enhanced parameters (gad_* parameters)
+    if 'gad_source' in dict_result:
+        url_dict['gad_source'] = dict_result['gad_source'][0]
+    if 'gad_campaignid' in dict_result:
+        url_dict['gad_campaignid'] = dict_result['gad_campaignid'][0]
 
     return url_dict
 
@@ -353,7 +393,19 @@ def parse_client_referer_url_string(url_string: str) -> dict:
         'clientReferer_li_fat_id': parsed_url_result['li_fat_id'],
         'clientReferer_fbclid': parsed_url_result['fbclid'],
         'clientReferer_msclkid': parsed_url_result['msclkid'],
-        'clientReferer_gclid': parsed_url_result['gclid']
+        'clientReferer_gclid': parsed_url_result['gclid'],
+        'clientReferer_hsa_acc': parsed_url_result['hsa_acc'],
+        'clientReferer_hsa_cam': parsed_url_result['hsa_cam'],
+        'clientReferer_hsa_grp': parsed_url_result['hsa_grp'],
+        'clientReferer_hsa_ad': parsed_url_result['hsa_ad'],
+        'clientReferer_hsa_src': parsed_url_result['hsa_src'],
+        'clientReferer_hsa_tgt': parsed_url_result['hsa_tgt'],
+        'clientReferer_hsa_kw': parsed_url_result['hsa_kw'],
+        'clientReferer_hsa_mt': parsed_url_result['hsa_mt'],
+        'clientReferer_hsa_net': parsed_url_result['hsa_net'],
+        'clientReferer_hsa_ver': parsed_url_result['hsa_ver'],
+        'clientReferer_gad_source': parsed_url_result['gad_source'],
+        'clientReferer_gad_campaignid': parsed_url_result['gad_campaignid']
     }
 
     return utm_dict
@@ -379,6 +431,18 @@ def parse_client_request_query_string(url_string: str) -> dict:
         'clientRequest_li_fat_id': parsed_url_result['li_fat_id'],
         'clientRequest_fbclid': parsed_url_result['fbclid'],
         'clientRequest_msclkid': parsed_url_result['msclkid'],
-        'clientRequest_gclid': parsed_url_result['gclid']
+        'clientRequest_gclid': parsed_url_result['gclid'],
+        'clientRequest_hsa_acc': parsed_url_result['hsa_acc'],
+        'clientRequest_hsa_cam': parsed_url_result['hsa_cam'],
+        'clientRequest_hsa_grp': parsed_url_result['hsa_grp'],
+        'clientRequest_hsa_ad': parsed_url_result['hsa_ad'],
+        'clientRequest_hsa_src': parsed_url_result['hsa_src'],
+        'clientRequest_hsa_tgt': parsed_url_result['hsa_tgt'],
+        'clientRequest_hsa_kw': parsed_url_result['hsa_kw'],
+        'clientRequest_hsa_mt': parsed_url_result['hsa_mt'],
+        'clientRequest_hsa_net': parsed_url_result['hsa_net'],
+        'clientRequest_hsa_ver': parsed_url_result['hsa_ver'],
+        'clientRequest_gad_source': parsed_url_result['gad_source'],
+        'clientRequest_gad_campaignid': parsed_url_result['gad_campaignid']
     }
     return utm_dict
